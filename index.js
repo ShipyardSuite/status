@@ -14,6 +14,8 @@ const app = express();
 //Serving the files on the dist folder
 app.use(express.static(dist));
 
+// curl localhost:9876/service-endpoints/
+
 app.get(`/${service}/services/`, (req, res) => {
 	fs.readFile('./services.json', 'utf8', (err, jsonString) => {
 		if (err) {

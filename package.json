@@ -6,10 +6,10 @@
 	"license": "Apache-2.0",
 	"main": "index.js",
 	"scripts": {
-		"start": "brunch watch --server",
+		"start": "npm run build && node index.js",
 		"build": "brunch build --production",
-		"start:dev": "concurrently \"brunch watch\" \"nodemon index.js\"",
-		"start:prod": "npm run build && node index.js"
+		"start:prod": "brunch watch --server",
+		"start:dev": "concurrently \"brunch watch\" \"nodemon index.js\""
 	},
 	"dependencies": {
 		"express": "^4.17.1",
