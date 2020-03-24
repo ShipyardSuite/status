@@ -150,8 +150,6 @@ services:
             - mongo 
         networks:
             - gateway
-        environment:
-            SERVICE_PORT: ${SERVICE_PORT}
 
 networks:
     gateway:

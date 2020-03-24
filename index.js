@@ -7,13 +7,14 @@ const fs = require('fs');
 require('dotenv').config();
 
 const dist = path.join(__dirname, 'dist');
-const port = process.env.SERVICE_PORT || 3088;
+const port = process.env.SERVICE_PORT;
+const service = process.env.SERVICE_NAME;
 const app = express();
 
 //Serving the files on the dist folder
 app.use(express.static(dist));
 
-app.get('/status/services/', (req, res) => {
+app.get(`/${service}/services/`, (req, res) => {
 	fs.readFile('./services.json', 'utf8', (err, jsonString) => {
 		if (err) {
 			res.json({ success: false, data: [] });
