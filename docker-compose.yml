@@ -16,6 +16,8 @@ services:
         depends_on:
             - notfound
             - auth
+            - user
+            - status
             - homepage
             - dashboard
         networks:
@@ -46,7 +48,7 @@ services:
         ports:
             - "3069:3069"
         environment:
-            DATABASE_URL: ${DATABASE_URL}
+            DATABASE_URL: mongodb://mongo:27017/db
             SERVICE_PORT: 3069
         networks:
             - gateway
@@ -58,7 +60,7 @@ services:
             - mongo 
             - auth
         environment:
-            DATABASE_URL: ${DATABASE_URL}
+            DATABASE_URL: mongodb://mongo:27017/db
         networks:
             - gateway
 
@@ -74,7 +76,7 @@ services:
             REDIS_URL: redis
             SERVICE_PORT: 3001
             SERVICE_NAME: homepage
-            DATABASE_URL: ${DATABASE_URL}
+            DATABASE_URL: mongodb://mongo:27017/db
         networks: 
             - gateway
 
@@ -89,7 +91,7 @@ services:
         environment:
             REDIS_URL: redis
             SERVICE_NAME: auth
-            DATABASE_URL: ${DATABASE_URL}
+            DATABASE_URL: mongodb://mongo:27017/db
             SERVICE_PORT: 3002
         networks: 
             - gateway
@@ -115,7 +117,7 @@ services:
         environment:
             REDIS_URL: redis
             SERVICE_NAME: dashboard
-            DATABASE_URL: ${DATABASE_URL}
+            DATABASE_URL: mongodb://mongo:27017/db
             SERVICE_PORT: 3004
         networks: 
             - gateway
@@ -131,7 +133,7 @@ services:
         environment:
             REDIS_URL: redis
             SERVICE_NAME: user
-            DATABASE_URL: ${DATABASE_URL}
+            DATABASE_URL: mongodb://mongo:27017/db
             SERVICE_PORT: 3005
         networks: 
             - gateway
@@ -140,11 +142,14 @@ services:
         build: ./
         container_name: status
         ports:
-            - "${SERVICE_PORT}:${SERVICE_PORT}"
+            - "4000:4000"
         volumes:
             - ./:/usr/src/app
         working_dir: /usr/src/app
         command: sh -c 'npm install; npm run start:dev'
+        environment:
+            SERVICE_NAME: status
+            SERVICE_PORT: 3333
         depends_on:
             - redis
             - mongo 

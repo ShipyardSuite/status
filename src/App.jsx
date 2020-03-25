@@ -1,12 +1,13 @@
 import React from 'react';
-import { Container, Item, Icon, Segment } from 'semantic-ui-react';
+import { Container, Item, Icon, Segment, Header, Divider, Button, List, Grid, Table } from 'semantic-ui-react';
 
 export default class App extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			services: []
+			services: [],
+			activePane: null
 		};
 	}
 
@@ -23,9 +24,7 @@ export default class App extends React.Component {
 	getServices() {
 		fetch(`http://localhost:8080/status/services/`).then((res) => res.json()).then((json) => {
 			if (json.success) {
-				this.setState({
-					services: json.data
-				});
+				this.setState({ services: json.data });
 			}
 		});
 	}
@@ -33,50 +32,98 @@ export default class App extends React.Component {
 	getServiceState() {
 		const { services } = this.state;
 
-		services.forEach((service) => {
-			fetch(`http://localhost:8080/${service.title}/api/test`)
+		services.forEach((service, i) => {
+			fetch(`http://localhost:8080/${service.title}/api/status`)
 				.then((res) => res.json())
 				.then((json) => {
-					if (json.success) {
-						service.online = true;
-					}
+					service.online = true;
 				})
 				.catch(() => {
 					service.online = false;
 				});
 		});
 
-		this.setState({ services });
+		this.setState(services);
+	}
+
+	handleChange(e) {
+		this.setState({ activePane: e });
 	}
 
 	render() {
-		const { services } = this.state;
+		const { services, activePane } = this.state;
+
+		console.log(services);
 
 		return (
 			<div id="content">
 				<Container>
 					<Segment>
-						<Item.Group divided>
+						<Header as="h1">Service Status</Header>
+						<Divider />
+						<Item.Group divided unstackable>
 							{services.map((service, i) => {
 								return (
 									<Item key={i}>
-										{service.online ? (
-											<Icon color="green" name="check" size="huge" />
-										) : (
-											<Icon color="red" name="cancel" size="huge" />
+										{service.online === undefined && (
+											<Icon color="grey" loading name="sync alternate" size="huge" />
 										)}
+										{service.online === true && <Icon color="green" name="check" size="huge" />}
+										{service.online === false && <Icon color="red" name="cancel" size="huge" />}
 										<Item.Content verticalAlign="middle">
 											<Item.Header
 												as="a"
-												href={`http://localhost:8080/${service.title}/api/test`}
+												href={`http://localhost:8080/${service.title}/api/status`}
 											>
 												{service.title}
 											</Item.Header>
-											{service.description && (
-												<Item.Description>
-													<p>{service.description}</p>
-												</Item.Description>
-											)}
+											<Button.Group floated="right">
+												{service.online === undefined ? (
+													''
+												) : (
+													service.online === false && (
+														<Button
+															negative
+															onClick={() => {
+																window.location.href = `mailto:shipyardsuite@gmail.com?Subject=Notice: Service "${service.title}" offline!&body=Hey, i just wanted to inform you that the service "${service.title}" is currently offline!`;
+															}}
+														>
+															Report outage
+														</Button>
+													)
+												)}
+												<Button floated="right" onClick={this.handleChange.bind(this, i)}>
+													{activePane === i ? '▼' : '▲'}
+												</Button>
+											</Button.Group>
+											<Item.Description>
+												{activePane === i && (
+													<Table collapsing basic="very">
+														<Table.Body>
+															<Table.Row>
+																<Table.Cell>
+																	<Icon name="home" /> Path:
+																</Table.Cell>
+																<Table.Cell />
+															</Table.Row>
+															<Table.Row>
+																<Table.Cell>
+																	<Icon name="disk" /> Origin:
+																</Table.Cell>
+																<Table.Cell>
+																	<a href={service.url}>{service.url}</a>
+																</Table.Cell>
+															</Table.Row>
+															<Table.Row>
+																<Table.Cell>
+																	<Icon name="time" /> Uptime:
+																</Table.Cell>
+																<Table.Cell />
+															</Table.Row>
+														</Table.Body>
+													</Table>
+												)}
+											</Item.Description>
 										</Item.Content>
 									</Item>
 								);
@@ -88,3 +135,16 @@ export default class App extends React.Component {
 		);
 	}
 }
+
+/** 
+ * <p>
+													<Icon name="home" /> Path:
+												</p>
+												<p>
+													<Icon name="disk" /> Origin: <a href={service.url}>{service.url}</a>
+												</p>
+												<p>
+													<Icon name="time" /> Uptime:
+												</p>
+ * 
+*/

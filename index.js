@@ -2,33 +2,31 @@
 
 const path = require('path');
 const express = require('express');
+const fetch = require('node-fetch');
 const fs = require('fs');
 
-require('dotenv').config();
-
 const dist = path.join(__dirname, 'dist');
-const port = process.env.SERVICE_PORT;
-const service = process.env.SERVICE_NAME;
+const port = process.env.SERVICE_PORT | 3333;
 const app = express();
 
-//Serving the files on the dist folder
 app.use(express.static(dist));
 
-// curl localhost:9876/service-endpoints/
-
-app.get(`/${service}/services/`, (req, res) => {
-	fs.readFile('./services.json', 'utf8', (err, jsonString) => {
-		if (err) {
-			res.json({ success: false, data: [] });
-		}
-
-		res.json({ success: true, data: JSON.parse(jsonString) });
-	});
+app.get('/status/', (req, res) => {
+	res.sendFile(path.join(dist, 'index.html'));
 });
 
-//Send index.html when the user access the web
-app.get('*', (req, res) => {
-	res.sendFile(path.join(dist, 'index.html'));
+app.get(`/status/services/`, async (req, res) => {
+	await fetch('http://localhost:9876/service-endpoints').then((res) => res.json()).then((json) => {
+		const serviceNames = Object.keys(json);
+
+		const tempArray = [];
+
+		serviceNames.forEach((serviceName, i) => {
+			tempArray.push({ title: serviceName, url: json[serviceName].url });
+		});
+
+		res.json({ success: true, data: tempArray });
+	});
 });
 
 app.listen(port, (err) => {
