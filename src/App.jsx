@@ -24,7 +24,7 @@ export default class App extends React.Component {
 	getServices() {
 		fetch(`http://${window.location.host}/status/services/`).then((res) => res.json()).then((json) => {
 			if (json.success) {
-				this.setState({ services: json.data });
+				this.setState({ services: json.data }), () => console.log('services loaded...');
 			}
 		});
 	}
