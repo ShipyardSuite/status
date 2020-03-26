@@ -22,7 +22,7 @@ export default class App extends React.Component {
 	}
 
 	getServices() {
-		fetch(`http://localhost:8080/status/services/`).then((res) => res.json()).then((json) => {
+		fetch(`http://${window.location.host}/status/services/`).then((res) => res.json()).then((json) => {
 			if (json.success) {
 				this.setState({ services: json.data });
 			}
@@ -33,7 +33,7 @@ export default class App extends React.Component {
 		const { services } = this.state;
 
 		services.forEach((service, i) => {
-			fetch(`http://localhost:8080/${service.title}/api/status`)
+			fetch(`http://${window.location.host}/${service.title}/api/status`)
 				.then((res) => res.json())
 				.then((json) => {
 					service.online = true;
@@ -73,7 +73,7 @@ export default class App extends React.Component {
 										<Item.Content verticalAlign="middle">
 											<Item.Header
 												as="a"
-												href={`http://localhost:8080/${service.title}/api/status`}
+												href={`http://${window.location.host}/${service.title}/api/status`}
 											>
 												{service.title}
 											</Item.Header>
