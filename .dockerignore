@@ -1,6 +1,7 @@
 /_legacy
 /node_modules
+/docs
 /data
-/public
+/gateway
 .DS_Store
-.env
+docker-compose.yml

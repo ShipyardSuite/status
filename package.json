@@ -2,46 +2,43 @@
 	"name": "status",
 	"version": "0.1.0",
 	"description": "",
-	"author": "ShipyardSuite",
-	"license": "Apache-2.0",
-	"main": "index.js",
+	"main": "server/index.js",
 	"scripts": {
-		"start": "npm run build && node index.js",
-		"build": "brunch build --production",
-		"start:prod": "brunch watch --server",
-		"start:dev": "concurrently \"brunch watch\" \"nodemon index.js\""
-	},
-	"dependencies": {
-		"express": "^4.17.1",
-		"node-fetch": "^2.6.0",
-		"react": "^16.8.6",
-		"semantic-ui-react": "^0.88.2"
-	},
-	"devDependencies": {
-		"auto-reload-brunch": "^2",
-		"awesome-typescript-loader": "^5.2.1",
-		"babel-brunch": "~6.0",
-		"babel-preset-latest": "^6",
-		"babel-preset-react": "~6.22",
-		"brunch": "^2",
-		"clean-css-brunch": "^2",
-		"concurrently": "^3.1.0",
-		"css-loader": "^2.1.1",
-		"dotenv": "^8.1.0",
-		"less-loader": "^5.0.0",
-		"mini-css-extract-plugin": "^0.8.0",
-		"nodemon": "^2.0.2",
-		"react-dom": "^16.8.6",
-		"style-loader": "^0.23.1",
-		"typescript": "^3.4.5",
-		"uglify-js-brunch": "^2"
+		"start:dev": "concurrently \"brunch watch\" \"nodemon -L server/index.js\"",
+		"build": "npm run docs && brunch build",
+		"start": "node server/index.js",
+		"docs": "jsdoc -r ./server/*.js -d ./docs",
+		"clean": "rm -r ./public ./docs",
+		"test": "mocha"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/ShipyardSuite/status.git"
 	},
+	"keywords": [],
+	"author": "Shipyard Suite <shipyardsuite@gmail.com>",
+	"license": "Apache-2.0",
 	"bugs": {
 		"url": "https://github.com/ShipyardSuite/status/issues"
 	},
-	"homepage": "https://github.com/ShipyardSuite/status#readme"
+	"homepage": "https://github.com/ShipyardSuite/status#readme",
+	"dependencies": {
+		"express": "^4.17.1",
+		"react": "^15.4",
+		"react-dom": "^15.4"
+	},
+	"devDependencies": {
+		"babel-preset-react": "~6.22",
+		"babel-preset-latest": "^6",
+		"auto-reload-brunch": "^2",
+		"clean-css-brunch": "^2",
+		"uglify-js-brunch": "^2",
+		"concurrently": "^5.1.0",
+		"babel-brunch": "~6.0",
+		"brunch": "^2",
+		"chai": "^4.2.0",
+		"jsdoc": "^3.6.3",
+		"mocha": "^7.1.1",
+		"nodemon": "^2.0.2"
+	}
 }

@@ -1,23 +1,21 @@
-// See http://brunch.io for documentation.
 exports.files = {
-	javascripts: {
-		joinTo: {
-			'status/vendor.js': /^(?!src)/,
-			'status/index.js': /^src/
-		}
-	},
+	javascripts: { joinTo: 'app.js' },
 	stylesheets: { joinTo: 'app.css' }
 };
 
-exports.modules = {
-	nameCleaner: (path) => path.replace(/^src\//, '')
-};
-
-exports.paths = {
-	watched: [ 'src' ],
-	public: 'dist'
-};
-
 exports.plugins = {
-	babel: { presets: [ 'latest', 'react' ] }
+	babel: { presets: [ 'latest', 'react' ] },
+	uglify: {
+		mangle: false,
+		compress: {
+			global_defs: {
+				DEBUG: false
+			}
+		}
+	},
+	cleancss: {
+		keepSpecialComments: 0,
+		removeEmpty: true
+	},
+	autoReload: { enabled: true }
 };
