@@ -1,7 +1,6 @@
-node_modules/
-/public
 /_legacy
+/node_modules
 /data
-/dist
+/public
 .DS_Store
 .env

@@ -1,160 +1,41 @@
-version: '2'
+version: "3"
+
 services:
+    # redis:
+    #     image: redis
+    #     container_name: redis
+    #     ports:
+    #         - "6379:6379"
+    #     networks:
+    #         - gateway
 
-    gateway:
-        build: 
-            context: ./gateway
-            dockerfile: Dockerfile
-        container_name: gateway
-        ports:
-            - "8080:8080"
-            - "8443:8443"
-            - "9876:9876"
-        volumes:
-            - ./gateway/system.config.yml:/usr/src/app/config/system.config.yml
-            - ./gateway/gateway.config.yml:/usr/src/app/config/gateway.config.yml
-        depends_on:
-            - notfound
-            - auth
-            - user
-            - status
-            - homepage
-            - dashboard
-        networks:
-            - gateway
-
-    redis:
-        image: redis
-        container_name: redis
-        ports:
-            - "6379:6379"
-        networks:
-            - gateway
-
-    mongo:
-        image: mongo:3
-        container_name: mongo
-        command: mongod --smallfiles --bind_ip_all
-        volumes:
-            - ./data:/data/db
-        ports:
-            - "27017:27017"
-        networks:
-            - gateway
-
-    connection:
-        image: shipyardsuite/connection:develop
-        container_name: connection
-        ports:
-            - "3069:3069"
-        environment:
-            DATABASE_URL: mongodb://mongo:27017/db
-            SERVICE_PORT: 3069
-        networks:
-            - gateway
-
-    migration:
-        image: shipyardsuite/develop-migration
-        container_name: migration
-        depends_on:
-            - mongo 
-            - auth
-        environment:
-            DATABASE_URL: mongodb://mongo:27017/db
-        networks:
-            - gateway
-
-    homepage:
-        image: shipyardsuite/homepage:develop
-        container_name: homepage
-        expose:
-            - "3001"
-        depends_on:
-            - redis
-            - mongo
-        environment:
-            REDIS_URL: redis
-            SERVICE_PORT: 3001
-            SERVICE_NAME: homepage
-            DATABASE_URL: mongodb://mongo:27017/db
-        networks: 
-            - gateway
-
-    auth:
-        image: shipyardsuite/auth:develop
-        container_name: auth
-        expose:
-            - "3002"
-        depends_on:
-            - redis
-            - mongo
-        environment:
-            REDIS_URL: redis
-            SERVICE_NAME: auth
-            DATABASE_URL: mongodb://mongo:27017/db
-            SERVICE_PORT: 3002
-        networks: 
-            - gateway
-
-    notfound:
-        image: shipyardsuite/notfound:develop
-        container_name: notfound
-        expose:
-            - "3003"
-        environment:
-            SERVICE_PORT: 3003
-        networks: 
-            - gateway
-
-    dashboard:
-        image: shipyardsuite/dashboard:develop
-        container_name: dashboard
-        expose:
-            - "3005"
-        depends_on:
-            - redis
-            - mongo
-        environment:
-            REDIS_URL: redis
-            SERVICE_NAME: dashboard
-            DATABASE_URL: mongodb://mongo:27017/db
-            SERVICE_PORT: 3004
-        networks: 
-            - gateway
-
-    user:
-        image: shipyardsuite/user:develop
-        container_name: user
-        expose:
-            - "3005"
-        depends_on:
-            - redis
-            - mongo
-        environment:
-            REDIS_URL: redis
-            SERVICE_NAME: user
-            DATABASE_URL: mongodb://mongo:27017/db
-            SERVICE_PORT: 3005
-        networks: 
-            - gateway
+    # mongo:
+    #     image: mongo:3
+    #     container_name: mongo
+    #     command: mongod --smallfiles --bind_ip_all
+    #     volumes:
+    #         - ./data:/data/db
+    #     ports:
+    #         - "27017:27017"
+    #     networks:
+    #         - gateway
 
     status:
-        build: ./
-        container_name: status
-        ports:
-            - "4000:4000"
+        build:
+            context: ./
+            dockerfile: Dockerfile
         volumes:
             - ./:/usr/src/app
         working_dir: /usr/src/app
         command: sh -c 'npm install; npm run start:dev'
-        environment:
-            SERVICE_NAME: status
-            SERVICE_PORT: 3333
-        depends_on:
-            - redis
-            - mongo 
+        container_name: status
+        ports:
+            - "3008:3008"
         networks:
             - gateway
+        environment:
+            SERVICE_PORT: 3008
+            SERVICE_NAME: status
 
 networks:
     gateway:
