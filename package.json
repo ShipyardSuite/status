@@ -23,10 +23,14 @@
 	},
 	"homepage": "https://github.com/ShipyardSuite/status#readme",
 	"dependencies": {
+		"cors": "2.8.5",
 		"express": "^4.17.1",
 		"node-fetch": "^2.6.0",
 		"react": "^15.4",
-		"react-dom": "^15.4"
+		"react-dom": "^15.4",
+		"winston": "3.2.1",
+		"winston-redis": "3.1.0",
+		"redis": "3.0.2"
 	},
 	"devDependencies": {
 		"babel-preset-react": "~6.22",
