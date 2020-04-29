@@ -14,6 +14,10 @@ export default class App extends React.Component {
 	 * @method render
 	 */
 	render() {
+		/**
+		 * @todo Recreate service status overview
+		 * @body The original layout was scrapped, and a new one should be implemented.
+		 */
 		return <div>STATUS</div>;
 	}
 }
