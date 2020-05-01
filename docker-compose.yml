@@ -2,13 +2,23 @@ version: "3"
 
 services:
 
+    # redis:
+    #     image: redis
+    #     container_name: redis
+    #     ports:
+    #         - "6379:6379"
+    #     networks:
+    #         - gateway
+
     redis:
         image: redis
         container_name: redis
         ports:
             - "6379:6379"
         networks:
-            - gateway
+            gateway:
+                aliases:
+                    - redis
 
     mongo:
         image: mongo:3
@@ -18,6 +28,19 @@ services:
             - ./data:/data/db
         ports:
             - "27017:27017"
+        networks:
+            - gateway
+
+    gateway:
+        image: shipyardsuite/gateway:develop
+        container_name: gateway
+        ports:
+            - "8080:8080"
+            - "8443:8443"
+            - "9876:9876"
+        volumes:
+            - ./gateway/config/system.config.yml:/usr/src/app/config/system.config.yml
+            - ./gateway/config/gateway.config.yml:/usr/src/app/config/gateway.config.yml
         networks:
             - gateway
 
@@ -57,6 +80,18 @@ services:
             SERVICE_NAME: auth
             SERVICE_PORT: 3002
 
+    documentation:
+        image: shipyardsuite/documentation:develop
+        command: sh -c 'npm run start:dev'
+        container_name: documentation
+        ports:
+            - "3003:3003"
+        networks:
+            - gateway
+        environment:
+            SERVICE_NAME: documentation
+            SERVICE_PORT: 3003
+
     dashboard:
         image: shipyardsuite/dashboard:develop
         command: sh -c 'npm run start:dev'
@@ -67,7 +102,7 @@ services:
             - gateway
         environment:
             SERVICE_NAME: dashboard
-            SERVICE_PORT: 3004x
+            SERVICE_PORT: 3004
 
     player:
         image: shipyardsuite/player:develop
