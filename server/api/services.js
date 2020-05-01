@@ -9,7 +9,7 @@ module.exports = (app, logger, serviceName) => {
 	 */
 	// Get all services from gateway
 	app.get(`/${serviceName}/api/list/services`, async (req, res) => {
-		await fetch('http://localhost:9876/service-endpoints')
+		await fetch('http://gateway:9876/service-endpoints')
 			.then((res) => res.json())
 			.then((json) => {
 				const serviceNames = Object.keys(json);
