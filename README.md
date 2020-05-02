@@ -8,6 +8,10 @@
 
 Microservice for service status informations
 
+# Usage
+
+...
+
 ## License
 
 This project is released under the [Apache version 2](LICENSE) license.
