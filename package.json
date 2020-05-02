@@ -9,8 +9,7 @@
 		"start": "node server/index.js",
 		"docs": "jsdoc -r ./server/*.js -d ./docs",
 		"clean": "rm -r ./public ./docs",
-		"test": "mocha --reporter dot",
-		"coverage": "nyc --reporter=text-lcov --reporter=lcov npm test"
+		"test": "nyc --reporter=lcov mocha -- -R spec tests/"
 	},
 	"repository": {
 		"type": "git",
