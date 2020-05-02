@@ -3,10 +3,6 @@
 const fetch = require('node-fetch');
 
 module.exports = (app, logger, serviceName) => {
-	/**
-	 * @todo Fix gateway port for service connection
-	 * @body Most likley, the gateway cannot be reached outside of the docker-network, so it should be implemented into it.
-	 */
 	// Get all services from gateway
 	app.get(`/${serviceName}/api/list/services`, async (req, res) => {
 		await fetch('http://gateway:9876/service-endpoints')
