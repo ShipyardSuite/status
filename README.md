@@ -6,6 +6,8 @@
 
 # status
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4517a736c1bd483f8a3c38817290d17d)](https://app.codacy.com/gh/ShipyardSuite/status?utm_source=github.com&utm_medium=referral&utm_content=ShipyardSuite/status&utm_campaign=Badge_Grade_Dashboard)
+
 Microservice for service status informations
 
 ## License
