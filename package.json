@@ -9,7 +9,7 @@
 		"start": "node server/index.js",
 		"docs": "jsdoc -r ./server/*.js -d ./docs",
 		"clean": "rm -r ./public ./docs",
-		"test": "mocha"
+		"test": "nyc --reporter=html --reporter=text mocha -- -R spec tests/"
 	},
 	"repository": {
 		"type": "git",
@@ -28,10 +28,10 @@
 		"node-fetch": "^2.6.0",
 		"react": "^15.4",
 		"react-dom": "^15.4",
-		"winston": "3.2.1",
-		"winston-redis": "3.1.0",
 		"redis": "3.0.2",
-		"semantic-ui-react": "^0.88.2"
+		"semantic-ui-react": "^0.88.2",
+		"winston": "3.2.1",
+		"winston-redis": "3.1.0"
 	},
 	"devDependencies": {
 		"babel-preset-react": "~6.22",
@@ -42,6 +42,7 @@
 		"concurrently": "^5.1.0",
 		"babel-brunch": "~6.0",
 		"brunch": "^2",
+		"nyc": "15.0.1",
 		"chai": "^4.2.0",
 		"jsdoc": "^3.6.3",
 		"mocha": "^7.1.1",

@@ -17,7 +17,7 @@ class App {
 		this.app = express();
 		this.serviceName = process.env.SERVICE_NAME || 'default';
 		this.servicePort = process.env.SERVICE_PORT || 3000;
-		this.logger;
+		this.logger = null;
 	}
 
 	/**
