@@ -30,7 +30,8 @@
 		"react-dom": "^15.4",
 		"winston": "3.2.1",
 		"winston-redis": "3.1.0",
-		"redis": "3.0.2"
+		"redis": "3.0.2",
+		"semantic-ui-react": "^0.88.2"
 	},
 	"devDependencies": {
 		"babel-preset-react": "~6.22",
